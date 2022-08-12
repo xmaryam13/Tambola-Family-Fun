@@ -104,7 +104,24 @@ def receivedMsg():
             
     
 
+def gameWindow():
+    global gameWindow
+    global canvas2
+    global screen_width
+    global screen_height
 
+
+    gameWindow = Tk()
+    gameWindow.title("Tambola Family Fun")
+    gameWindow.attributes('-fullscreen',True)
+    
+    screen_width = gameWindow.winfo_screenwidth()
+    screen_height = gameWindow.winfo_screenheight()
+    bg = ImageTk.PhotoImage(file = "C:/Users/MBajw/Downloads/background_project.png")
+    canvas2 = Canvas( gameWindow, width = 500,height = 500)
+    canvas2.pack(fill = "both", expand = True)
+    
+    
 def createTicket():
     global gameWindow
     global ticketGrid
@@ -144,6 +161,8 @@ def createTicket():
         ticketGrid.append(rowList)         
         xPos = 105
         yPos += 82
+
+        
 
 currentNumberList = None
 
