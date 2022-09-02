@@ -122,6 +122,27 @@ def gameWindow():
     canvas2.pack(fill = "both", expand = True)
     
     
+def showWrongMarking(): 
+    global ticketGrid
+    global flashNumberList 
+    for row in ticketGrid: 
+        for numberBox in row: 
+            if(numberBox['text']): 
+                if(int(numberBox['text']) not in flashNumberList): 
+                    if(platform.system() == 'Darwin'): 
+                        numberBox.configure(state='disabled', disabledbackground='#f48fb1', disabledforeground="white") 
+                    else: 
+                        numberBox.configure(state='disabled', background='#f48fb1', foreground="white")
+                        
+                        
+def markNumber():
+    global ticketGrid
+    global flashNumberList
+    for row in ticketGrid:
+        for numberBox in row:
+            
+    
+    
 def createTicket():
     global gameWindow
     global ticketGrid
