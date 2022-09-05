@@ -29,10 +29,12 @@ flashNumberList = []
 flashNumberLabel = None
 gameOver = False
 
+#bp
 def showWrongMarking():
     global ticketGrid
     global flashNumberList
 
+    # changing background color of number which is not flash yet on screen
     for row in ticketGrid:
         for numberBox in row:
             if(numberBox['text']):
@@ -41,9 +43,11 @@ def showWrongMarking():
                         numberBox.configure(state='disabled', disabledbackground='#f48fb1',
                             disabledforeground="white")
                     else:
+                        # For Windows Users
                         numberBox.configure(state='disabled', background='#f48fb1',
                             foreground="white")
 
+#bp
 def markNumber(button):
     global markedNumberList
     global flashNumberList
@@ -57,9 +61,12 @@ def markNumber(button):
     buttonText = int(button['text'])
     markedNumberList.append(buttonText)
 
+    # Make button disabled and changing color to green
     if(platform.system() == 'Darwin'):
+        # For Mac Users
         button.configure(state='disabled',disabledbackground='#c5e1a5', disabledforeground="black", highlightbackground="#c5e1a5")
     else:
+        # For Windows Users
         button.configure(state='disabled',background='#c5e1a5', foreground="black")
 
     winner =  all(item in flashNumberList for item in markedNumberList)
@@ -69,6 +76,7 @@ def markNumber(button):
         SERVER.send(message.encode())
         return
 
+    # When user lose the game
     if(len(currentNumberList) == len(markedNumberList)):
         winner =  all(item in flashNumberList for item in markedNumberList)
         if(not winner):
@@ -86,12 +94,14 @@ def placeNumbers():
     for row in range(0,3):
         randomColList = []
         counter = 0
+        # getting random 5 cols
         while counter<=4:
             randomCol = random.randint(0,8)
             if(randomCol not in randomColList):
                 randomColList.append(randomCol)
                 counter+=1
 
+        # Here key is index and values are numbers
         numberContainer = {
         "0": [1, 2, 3, 4, 5, 6, 7, 8, 9],
         "1": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
@@ -104,6 +114,7 @@ def placeNumbers():
         "8": [80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90],
         }
 
+        # placing a number to particular position in the ticket
         counter = 0
         while (counter < len(randomColList)):
             colNum = randomColList[counter]
@@ -118,18 +129,22 @@ def placeNumbers():
                 counter+=1
 
 
+    # changing background color of blank number box to different color
     for row in ticketGrid:
         for numberBox in row:
             if(not numberBox['text']):
                 if(platform.system() == 'Darwin'):
+                    # For Mac Users
                     numberBox.configure(state='disabled', disabledbackground='#ff8a65', highlightbackground='#ff8a65')
                 else:
+                    # For Windows users
                     numberBox.configure(state='disabled', background='#ff8a65')
 
 
 def createTicket():
     global gameWindow
     global ticketGrid
+    # Ticket Frame
     mianLable = Label(gameWindow, width=65, height=16,relief='ridge', borderwidth=5, bg='white')
     mianLable.place(x=95, y=119)
 
@@ -139,19 +154,22 @@ def createTicket():
         rowList = []
         for col in range(0, 9):
             if(platform.system() == 'Darwin'):
+                # For Mac users
                 boxButton = Button(gameWindow,
                 font = ("Chalkboard SE",18),
                 borderwidth=3,
                 pady=23,
                 padx=-22,
-                bg="#fff176", 
+                bg="#fff176", # Initial Yellow color
                 highlightbackground='#fff176',
-                activebackground='#c5e1a5') 
+                activebackground='#c5e1a5') # onPress Green Color
 
+                # Using Lambda Function
                 boxButton.configure(command = lambda boxButton=boxButton : markNumber(boxButton))
 
                 boxButton.place(x=xPos, y=yPos)
             else:
+                # For windows users
                 boxButton = tk.Button(gameWindow, font = ("Chalkboard SE",30), width=3, height=2,borderwidth=5, bg="#fff176")
                 boxButton.configure(command = lambda boxButton=boxButton : markNumber(boxButton))
                 boxButton.place(x=xPos, y=yPos)
@@ -187,8 +205,10 @@ def gameWindow():
     canvas2 = Canvas( gameWindow, width = 500,height = 500)
     canvas2.pack(fill = "both", expand = True)
 
+    # Display image
     canvas2.create_image( 0, 0, image = bg, anchor = "nw")
 
+    # Add Text
     canvas2.create_text( screen_width/4.5,50, text = "Tambola Family Fun", font=("Chalkboard SE",50), fill="#3e2723")
 
     createTicket()
@@ -231,7 +251,7 @@ def askPlayerName():
     screen_width = nameWindow.winfo_screenwidth()
     screen_height = nameWindow.winfo_screenheight()
 
-    bg = ImageTk.PhotoImage(file = 'C:/Users/MBajw/OneDrive/Documents/Coding.background_project.png')
+    bg = ImageTk.PhotoImage(file = "./assets/background.png")
 
     canvas1 = Canvas( nameWindow, width = 500,height = 500)
     canvas1.pack(fill = "both", expand = True)
@@ -272,9 +292,16 @@ def setup():
     global SERVER
     global PORT
     global IP_ADDRESS
+
+
     SERVER = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     SERVER.connect((IP_ADDRESS, PORT))
+
     thread = Thread(target=recivedMsg)
     thread.start()
+
     askPlayerName()
+
+
+
 setup()
