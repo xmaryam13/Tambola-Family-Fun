@@ -113,11 +113,4 @@ def setup():
 
 
 setup()
-            CLIENTS[player_name] = {'player_type' : 'player2'}
         
-        CLIENTS[player_name]['player_scoket'] = player_socket
-        CLIENTS[player_name]['address'] = addr
-        CLIENTS[player_name]['player_name'] = player_name
-        CLIENTS[player_name]['turn'] = False
-        
-        print(f"Connection established with {player_name} : {addr}")
